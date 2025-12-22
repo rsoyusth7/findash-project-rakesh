@@ -41,8 +41,7 @@ pipeline {
                         -v /var/run/docker.sock:/var/run/docker.sock \
                         aquasec/trivy image \
                         --severity HIGH,CRITICAL \
-                        --no-progress \
-                        --exit-code 0 \
+                        --exit-code 1 \
                         ${NEXUS_REGISTRY}/${IMAGE_NAME}:${params.VERSION_TAG}
                     """
                 }
@@ -112,8 +111,7 @@ pipeline {
                 // 1. Remove the specific image version created in this build to free space
                 sh "docker rmi ${NEXUS_REGISTRY}/${IMAGE_NAME}:${params.VERSION_TAG} || true"
                 
-                // 2. Remove "dangling" images (failed builds or intermediate layers)
-                // This keeps the agent clean over time
+                // 2. Remove "dangling" images
                 sh "docker image prune -f"
             }
         }
