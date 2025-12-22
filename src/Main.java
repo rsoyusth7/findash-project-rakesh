@@ -9,7 +9,7 @@ import java.net.InetSocketAddress;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        // Configuration defaults (can be overridden by Env Vars)
+        //  Defaults Configuration can be overridden by Env Vars
         int port = 8080;
         String version = System.getenv("APP_VERSION") != null ? System.getenv("APP_VERSION") : "v1.0 (Stable)";
         String color = System.getenv("BG_COLOR") != null ? System.getenv("BG_COLOR") : "#ADD8E6"; // Default Blue
@@ -24,7 +24,7 @@ public class Main {
                         "<head><title>FinDash Bank</title></head>" +
                         "<body style='background-color:" + color + "; text-align:center; padding-top:50px; font-family: sans-serif;'>" +
                         "<div style='background: white; width: 50%; margin: auto; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);'>" +
-                        "<h1>FinDash Financial Systems By Trainer</h1>" +  // Add your name here
+                        "<h1>FinDash Financial Systems By Trainer</h1>" +
                         "<h2>Current Version: " + version + "</h2>" +
                         "<p>Status: <b style='color:green'>SYSTEM ONLINE</b></p>" +
                         "<p><i>Serving from Container</i></p>" +

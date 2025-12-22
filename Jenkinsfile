@@ -9,9 +9,9 @@ pipeline {
 
     environment {
         NEXUS_REGISTRY = 'registry.nchldemo.com'
-        IMAGE_NAME = 'findash-app-trainer'
+        IMAGE_NAME = 'findash-app-trainer' // Add your name here
         NEXUS_CRED = 'nexus-auth'
-        CONTAINER_NAME = 'findash-app-trainer'
+        CONTAINER_NAME = 'findash-app-trainer' // Add your name here
     }
 
     stages {
@@ -48,7 +48,6 @@ pipeline {
             }
         }
 
-
         // --- Stage 3: Push to Nexus ---
         stage('Push to Nexus') {
             when { expression { params.ACTION == 'Deploy New Version' } }
@@ -76,7 +75,7 @@ pipeline {
                     docker.withRegistry("http://${NEXUS_REGISTRY}", "${NEXUS_CRED}") {
                         // Pull logic ensures we use the registry version
                         sh "docker pull ${NEXUS_REGISTRY}/${IMAGE_NAME}:${params.VERSION_TAG}"
-
+                        // Change the port 9091 to a unique port
                         sh """
                             docker run -d \
                             --name ${CONTAINER_NAME} \
@@ -91,6 +90,7 @@ pipeline {
         }
 
         stage('Verify Deployment') {
+            // Use the same port in place of 9091 that your set above
             steps {
                 script {
                     sh "sleep 5"
@@ -102,7 +102,7 @@ pipeline {
     }
 
     // --- CLEANUP SECTION ---
-    // This runs regardless of whether the build passed or failed
+    // This runs regardless of whether the build passed or failed but will always fail in our case why?
     post {
         always {
             script {
