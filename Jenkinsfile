@@ -31,14 +31,23 @@ pipeline {
             when { expression { params.ACTION == 'Deploy New Version' } }
             steps {
                 script {
-                    echo "Scanning Image for Vulnerabilities..."
+                    echo "Scanning Image using Trivy Container..."
+                    
                     // --severity: Only show High and Critical bugs
                     // --exit-code 0: Don't fail the build (Change to 1 if you want to block bad builds)
                     // --no-progress: Cleaner logs in Jenkins
-                    sh "trivy image --severity HIGH,CRITICAL --no-progress --exit-code 0 ${NEXUS_REGISTRY}/${IMAGE_NAME}:${params.VERSION_TAG}"
+                    sh """
+                        docker run --rm \
+                        aquasec/trivy image \
+                        --severity HIGH,CRITICAL \
+                        --no-progress \
+                        --exit-code 0 \
+                        ${NEXUS_REGISTRY}/${IMAGE_NAME}:${params.VERSION_TAG}
+                    """
                 }
             }
         }
+
 
         // --- Stage 3: Push to Nexus ---
         stage('Push to Nexus') {
