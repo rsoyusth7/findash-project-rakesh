@@ -9,9 +9,9 @@ pipeline {
 
     environment {
         NEXUS_REGISTRY = 'registry.nchldemo.com'
-        IMAGE_NAME = 'findash-app-aayushP' // Add your name here
+        IMAGE_NAME = 'findash-app-aayushpokharel' // Add your name here
         NEXUS_CRED = 'nexus-auth'
-        CONTAINER_NAME = 'findash-app-aayushP' // Add your name here
+        CONTAINER_NAME = 'findash-app-aayushpokharel' // Add your name here
     }
 
     stages {
