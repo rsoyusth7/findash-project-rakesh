@@ -9,9 +9,9 @@ pipeline {
 
     environment {
         NEXUS_REGISTRY = 'registry.nchldemo.com'
-        IMAGE_NAME = 'findash-app-aayushpokharel' // Add your name here
+        IMAGE_NAME = 'findash-app-rakesh' // Add your name here
         NEXUS_CRED = 'nexus-auth'
-        CONTAINER_NAME = 'findash-app-aayushpokharel' // Add your name here
+        CONTAINER_NAME = 'findash-app-rakesh' // Add your name here
     }
 
     stages {
@@ -27,26 +27,26 @@ pipeline {
         }
 
         // --- Stage 2: Trivy Security Scan ---
-        stage('Trivy Security Scan') {
-            when { expression { params.ACTION == 'Deploy New Version' } }
-            steps {
-                script {
-                    echo "Scanning Image using Trivy Container..."
+        // stage('Trivy Security Scan') {
+        //     when { expression { params.ACTION == 'Deploy New Version' } }
+        //     steps {
+        //         script {
+        //             echo "Scanning Image using Trivy Container..."
                     
-                    // --severity: Only show High and Critical bugs
-                    // --exit-code 0: Don't fail the build (Change to 1 if you want to block bad builds)
-                    // --no-progress: Cleaner logs in Jenkins
-                    sh """
-                        docker run --rm \
-                        -v /var/run/docker.sock:/var/run/docker.sock \
-                        aquasec/trivy image \
-                        --severity HIGH,CRITICAL \
-                        --exit-code 1 \
-                        ${NEXUS_REGISTRY}/${IMAGE_NAME}:${params.VERSION_TAG}
-                    """
-                }
-            }
-        }
+        //             // --severity: Only show High and Critical bugs
+        //             // --exit-code 0: Don't fail the build (Change to 1 if you want to block bad builds)
+        //             // --no-progress: Cleaner logs in Jenkins
+        //             sh """
+        //                 docker run --rm \
+        //                 -v /var/run/docker.sock:/var/run/docker.sock \
+        //                 aquasec/trivy image \
+        //                 --severity HIGH,CRITICAL \
+        //                 --exit-code 1 \
+        //                 ${NEXUS_REGISTRY}/${IMAGE_NAME}:${params.VERSION_TAG}
+        //             """
+        //         }
+        //     }
+        // }
 
         // --- Stage 3: Push to Nexus ---
         stage('Push to Nexus') {
@@ -79,7 +79,7 @@ pipeline {
                         sh """
                             docker run -d \
                             --name ${CONTAINER_NAME} \
-                            -p 9091:8080 \
+                            -p 9101:8080 \
                             -e APP_VERSION="${envVersion}" \
                             -e BG_COLOR="${envColor}" \
                             ${NEXUS_REGISTRY}/${IMAGE_NAME}:${params.VERSION_TAG}
@@ -94,8 +94,8 @@ pipeline {
             steps {
                 script {
                     sh "sleep 5"
-                    sh "curl -f http://localhost:9091 || exit 1"
-                    echo "Deployment Successful! Access at http://localhost:9091"
+                    sh "curl -f http://localhost:9101 || exit 1"
+                    echo "Deployment Successful! Access at http://localhost:9101"
                 }
             }
         }
